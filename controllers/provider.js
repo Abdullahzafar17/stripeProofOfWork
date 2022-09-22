@@ -4,16 +4,17 @@ const APIError = require('../utils/APIError')
 const status = require('http-status')
 const dbUtils = require('../utils/db')
 const {MODELS} = require('../utils/constants')
+const stripe = require('../stripe/stripe')
 
 const createAccount = catchAsync(async(req,res,next)=>{
     const {firstName,lastName,email} = req.body
+    console.log(req.body)
     const validate = await createAccountSchema.validateAsync(req.body);
     if(validate.error){
         return next(
             new APIError(validate.error.details[0].message,status.BAD_REQUEST)
         )
     }
-    console.log(validate.error)
     const isExist = await dbUtils.find(MODELS.PROVIDER,{
         where: {
             email : email
@@ -21,18 +22,25 @@ const createAccount = catchAsync(async(req,res,next)=>{
     })
     if (isExist) {
         return next(
-            new APIError("email Already Exists",status.BAD_REQUEST)
+            new APIError("Email Already Exists",status.BAD_REQUEST)
         )
     }
+
+    const StripeUserId = await stripe.createAccount(email)
+  
+    const createLink = await stripe.createAccountLink(StripeUserId)
+    
     const save = await dbUtils.create(MODELS.PROVIDER,{
         firstName : firstName,
         lastName : lastName,
-        email : email
+        email : email,
+        stripeId: StripeUserId
     })
-    res.status(200).send({
-        message : "success",
-        body : save
-    })
+    res.redirect(createLink.url);
+    // res.status(200).send({
+    //     message : "success",
+    //     body : save
+    // })
 })
 
 
