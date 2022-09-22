@@ -26,7 +26,4 @@ module.exports = {
     createCustomer,
     createPayment,
     refundPayment
-
-
-
 }
