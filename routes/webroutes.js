@@ -3,7 +3,8 @@ const {
   createAccount,
   createCustomer,
   createPayment,
-  refundPayment
+  refundPayment,
+  servicePlan
   } = require("../controllers/renders")
 
 
@@ -14,5 +15,6 @@ const {
     router.route("/customer").get(createCustomer)
     router.route("/payment").get(createPayment)
     router.route("/refund").get(refundPayment)
+    router.route("/service").get(servicePlan)
 
   }

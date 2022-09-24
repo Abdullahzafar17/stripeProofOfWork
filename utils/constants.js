@@ -1,12 +1,14 @@
 
 const TABLES = {
 PROVIDERS : "providers",
-CUSTOMERS : "customers"
+CUSTOMERS : "customers",
+SERVICE_PLANS : "servicePlans"
 }
 
 const MODELS = {
 CUSTOMER: "customer",
-PROVIDER : "provider"
+PROVIDER : "provider",
+SERVICE_PLAN : "servicePlan"
 }
 
 module.exports = {

@@ -13,9 +13,27 @@ exports.createAccount = async (email) => {
 exports.createAccountLink = async (account) => {
   const accountLink = await stripe.accountLinks.create({
     account: account,
-    refresh_url: "https://example.com/reauth",
+    refresh_url: "https://localhost:3000/home",
     return_url: "https://localhost:3000/home",
     type: "account_onboarding",
   });
   return accountLink;
+};
+
+exports.createService = async (productName,account,interval,count,amount) => {
+ console.log(interval)
+ console.log(count)
+  const plan = await stripe.plans.create({
+    amount: amount*100,
+    currency: 'usd',
+    interval: interval,
+    interval_count: count,
+    product: {
+      name: productName,
+    },
+    
+  }, 
+  {stripeAccount: account});
+
+  return plan;
 };

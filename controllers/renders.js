@@ -1,5 +1,7 @@
-// const APIError = require('../utils/APIError')
+
 const catchAsync = require('../utils/catchAsync')
+const dbUtils = require('../utils/db')
+const {MODELS} = require('../utils/constants')
 
 
 const home = catchAsync(async(req,res,next)=>{
@@ -17,7 +19,12 @@ const createPayment = catchAsync(async(req,res,next)=>{
 const refundPayment = catchAsync(async(req,res,next)=>{
     res.render('payment/refundPayment')
 })
-
+const servicePlan = catchAsync(async(req,res,next)=>{
+    var providers = await dbUtils.findAll(MODELS.PROVIDER)
+    res.render('services/service',{providers: providers})
+    
+   
+})
 
 
 module.exports = {
@@ -25,5 +32,6 @@ module.exports = {
     createAccount,
     createCustomer,
     createPayment,
-    refundPayment
+    refundPayment,
+    servicePlan
 }
